@@ -1,14 +1,16 @@
 import React, { Fragment, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { connect } from "react-redux";
-import { logout } from "../actions/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../reducers/authSlice";
 import "./Navbar.css";
 
-const Navbar = ({ logout, isAuthenticated }) => {
+const Navbar = () => {
   const [redirect, setRedirect] = useState(false);
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const logout_user = () => {
-    logout();
+    dispatch(logout());
     setRedirect(true);
   };
 
@@ -29,7 +31,7 @@ const Navbar = ({ logout, isAuthenticated }) => {
 
   const authLinks = () => (
     <li className="nav-item">
-      <a className="nav-link" href="#!" onClick={logout_user}>
+      <a className="nav-link" href="/" onClick={logout_user}>
         Logout
       </a>
     </li>
@@ -70,8 +72,4 @@ const Navbar = ({ logout, isAuthenticated }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-});
-
-export default connect(mapStateToProps, { logout })(Navbar);
+export default Navbar;

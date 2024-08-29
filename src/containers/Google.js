@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { googleAuthenticate } from "../actions/auth";
+import { useDispatch } from "react-redux";
+import { googleAuthenticate } from "../reducers/authSlice";
 import queryString from "query-string";
 
-const Google = ({ googleAuthenticate }) => {
+const Google = () => {
   let location = useLocation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const values = queryString.parse(location.search);
@@ -17,7 +18,7 @@ const Google = ({ googleAuthenticate }) => {
     console.log("Code: " + code);
 
     if (state && code) {
-      googleAuthenticate(state, code);
+      dispatch(googleAuthenticate({ state, code }));
     }
   }, [location]);
 
@@ -39,4 +40,4 @@ const Google = ({ googleAuthenticate }) => {
   );
 };
 
-export default connect(null, { googleAuthenticate })(Google);
+export default Google;

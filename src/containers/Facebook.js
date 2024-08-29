@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
-import { connect } from "react-redux";
-import { facebookAuthenticate } from "../actions/auth";
+import { useDispatch } from "react-redux";
+import { facebookAuthenticate } from "../reducers/authSlice";
 import queryString from "query-string";
 
-const Facebook = ({ facebookAuthenticate }) => {
+const Facebook = () => {
   let location = useLocation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const values = queryString.parse(location.search);
@@ -17,7 +18,7 @@ const Facebook = ({ facebookAuthenticate }) => {
     console.log("Code: " + code);
 
     if (state && code) {
-      facebookAuthenticate(state, code);
+      dispatch(facebookAuthenticate({ state, code }));
     }
   }, [location]);
 
@@ -39,4 +40,4 @@ const Facebook = ({ facebookAuthenticate }) => {
   );
 };
 
-export default connect(null, { facebookAuthenticate })(Facebook);
+export default Facebook;

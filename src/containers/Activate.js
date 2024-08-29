@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
-import { connect } from "react-redux";
-import { verify } from "../actions/auth";
+import { useDispatch } from "react-redux";
+import { verify } from "../reducers/authSlice";
 import "./Activate.css";
 
-const Verify = ({ verify }) => {
+const Verify = () => {
   const [verifyed, setVerifyed] = useState(false);
   const { uid, token } = useParams();
+  const dispatch = useDispatch();
 
   const verify_account = (e) => {
     e.preventDefault();
-    verify(uid, token);
+    dispatch(verify({ uid, token }));
     setVerifyed(true);
   };
 
@@ -31,4 +32,4 @@ const Verify = ({ verify }) => {
   );
 };
 
-export default connect(null, { verify })(Verify);
+export default Verify;

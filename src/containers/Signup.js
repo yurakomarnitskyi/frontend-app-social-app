@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { connect } from "react-redux";
-import { signup } from "../actions/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { signup } from "../reducers/authSlice";
 import axios from "axios";
 import googleLogo from "../logos/google.svg";
 import facebookLogo from "../logos/facebook.svg";
 import "./Signup.css";
 
-const Signup = ({ signup, isAuthenticated }) => {
+const Signup = () => {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
   const [accountCreated, setAccountCreated] = useState(false);
   const [formData, setFormData] = useState({
     first_name: "",
@@ -42,7 +45,7 @@ const Signup = ({ signup, isAuthenticated }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     if (password === re_password) {
-      signup(first_name, last_name, email, password, re_password);
+      dispatch(signup({ first_name, last_name, email, password, re_password }));
       setAccountCreated(true);
     }
   };
@@ -159,8 +162,4 @@ const Signup = ({ signup, isAuthenticated }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-});
-
-export default connect(mapStateToProps, { signup })(Signup);
+export default Signup;

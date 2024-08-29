@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { connect } from "react-redux";
-import { login } from "../actions/auth";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import "./Login.css";
 import googleLogo from "../logos/google.svg";
 import facebookLogo from "../logos/facebook.svg";
+import { login } from "../reducers/authSlice";
 
-const Login = ({ login, isAuthenticated }) => {
+const Login = () => {
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
   const [formData, setFormData] = useState({ email: "", password: "" });
   const { email, password } = formData;
 
@@ -16,7 +19,7 @@ const Login = ({ login, isAuthenticated }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    login(email, password);
+    dispatch(login({ email, password }));
   };
 
   const continueWithGoogle = async () => {
@@ -116,8 +119,4 @@ const Login = ({ login, isAuthenticated }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-});
-
-export default connect(mapStateToProps, { login })(Login);
+export default Login;
